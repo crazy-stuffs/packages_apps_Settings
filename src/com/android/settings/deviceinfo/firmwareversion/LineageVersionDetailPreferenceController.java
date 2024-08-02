@@ -18,6 +18,7 @@ package com.android.settings.deviceinfo.firmwareversion;
 
 import android.content.Context;
 import android.os.SystemProperties;
+import android.text.TextUtils;
 
 import androidx.preference.Preference;
 
@@ -30,13 +31,18 @@ public class LineageVersionDetailPreferenceController extends BasePreferenceCont
 
     private static final String KEY_LINEAGE_VERSION_PROP = "ro.modversion";
 
+    private static final String EVEREST_BUILDTYPE_PROPERTY = "ro.everest.buildtype";
+
+    private static final String EVEREST_EDITION_PROPERTY = "ro.everest.edition";
+
     public LineageVersionDetailPreferenceController(Context context, String key) {
         super(context, key);
     }
 
     @Override
     public int getAvailabilityStatus() {
-        return AVAILABLE;
+        return !TextUtils.isEmpty(SystemProperties.get(KEY_LINEAGE_VERSION_PROP)) && !TextUtils.isEmpty(SystemProperties.get(EVEREST_BUILDTYPE_PROPERTY)) && !TextUtils.isEmpty(SystemProperties.get(EVEREST_EDITION_PROPERTY))
+                ? AVAILABLE : UNSUPPORTED_ON_DEVICE;
     }
 
     @Override
@@ -51,8 +57,15 @@ public class LineageVersionDetailPreferenceController extends BasePreferenceCont
 
     @Override
     public CharSequence getSummary() {
-        return SystemProperties.get(KEY_LINEAGE_VERSION_PROP,
-                mContext.getString(R.string.unknown));
+        String everestVersion = SystemProperties.get(KEY_LINEAGE_VERSION_PROP);
+        String everestBuildType = SystemProperties.get(EVEREST_BUILDTYPE_PROPERTY);
+        String everestEdition = SystemProperties.get(EVEREST_EDITION_PROPERTY);
+        if (!everestVersion.isEmpty() && !everestBuildType.isEmpty() && !everestEdition.isEmpty()) {
+            return everestVersion + " | " + everestBuildType + " | " + everestEdition;
+        } else {
+            return
+                mContext.getString(R.string.device_info_default);
+        }
     }
 
     @Override
