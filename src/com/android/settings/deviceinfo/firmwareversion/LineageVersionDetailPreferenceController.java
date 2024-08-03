@@ -20,39 +20,27 @@ import android.content.Context;
 import android.os.SystemProperties;
 import android.text.TextUtils;
 
-import androidx.preference.Preference;
+import androidx.annotation.VisibleForTesting;
 
 import com.android.settings.R;
+import com.android.settings.Utils;
 import com.android.settings.core.BasePreferenceController;
 
 public class LineageVersionDetailPreferenceController extends BasePreferenceController {
 
-    private static final String TAG = "lineageVersionDialogCtrl";
+    @VisibleForTesting
+    static final String KEY_LINEAGE_VERSION_PROP = "ro.modversion";
+    static final String EVEREST_BUILDTYPE_PROPERTY = "ro.everest.buildtype";
+    static final String EVEREST_EDITION_PROPERTY = "ro.everest.edition";
 
-    private static final String KEY_LINEAGE_VERSION_PROP = "ro.modversion";
-
-    private static final String EVEREST_BUILDTYPE_PROPERTY = "ro.everest.buildtype";
-
-    private static final String EVEREST_EDITION_PROPERTY = "ro.everest.edition";
-
-    public LineageVersionDetailPreferenceController(Context context, String key) {
-        super(context, key);
+    public LineageVersionDetailPreferenceController(Context context, String preferenceKey) {
+        super(context, preferenceKey);
     }
 
     @Override
     public int getAvailabilityStatus() {
         return !TextUtils.isEmpty(SystemProperties.get(KEY_LINEAGE_VERSION_PROP)) && !TextUtils.isEmpty(SystemProperties.get(EVEREST_BUILDTYPE_PROPERTY)) && !TextUtils.isEmpty(SystemProperties.get(EVEREST_EDITION_PROPERTY))
                 ? AVAILABLE : UNSUPPORTED_ON_DEVICE;
-    }
-
-    @Override
-    public boolean useDynamicSliceSummary() {
-        return true;
-    }
-
-    @Override
-    public boolean isSliceable() {
-        return true;
     }
 
     @Override
@@ -66,10 +54,5 @@ public class LineageVersionDetailPreferenceController extends BasePreferenceCont
             return
                 mContext.getString(R.string.device_info_default);
         }
-    }
-
-    @Override
-    public boolean handlePreferenceTreeClick(Preference preference) {
-        return false;
     }
 }
