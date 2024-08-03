@@ -27,7 +27,6 @@ import com.android.settings.Utils;
 import com.android.settings.core.BasePreferenceController;
 
 public class LineageVersionDetailPreferenceController extends BasePreferenceController {
-
     @VisibleForTesting
     static final String KEY_LINEAGE_VERSION_PROP = "ro.modversion";
     static final String EVEREST_BUILDTYPE_PROPERTY = "ro.everest.buildtype";
@@ -39,7 +38,7 @@ public class LineageVersionDetailPreferenceController extends BasePreferenceCont
 
     @Override
     public int getAvailabilityStatus() {
-        return !TextUtils.isEmpty(SystemProperties.get(KEY_LINEAGE_VERSION_PROP)) && !TextUtils.isEmpty(SystemProperties.get(EVEREST_BUILDTYPE_PROPERTY)) && !TextUtils.isEmpty(SystemProperties.get(EVEREST_EDITION_PROPERTY))
+        return !TextUtils.isEmpty(SystemProperties.get(KEY_LINEAGE_VERSION_PROP))
                 ? AVAILABLE : UNSUPPORTED_ON_DEVICE;
     }
 
@@ -48,11 +47,23 @@ public class LineageVersionDetailPreferenceController extends BasePreferenceCont
         String everestVersion = SystemProperties.get(KEY_LINEAGE_VERSION_PROP);
         String everestBuildType = SystemProperties.get(EVEREST_BUILDTYPE_PROPERTY);
         String everestEdition = SystemProperties.get(EVEREST_EDITION_PROPERTY);
-        if (!everestVersion.isEmpty() && !everestBuildType.isEmpty() && !everestEdition.isEmpty()) {
-            return everestVersion + " | " + everestBuildType + " | " + everestEdition;
-        } else {
-            return
-                mContext.getString(R.string.device_info_default);
+
+        StringBuilder summary = new StringBuilder();
+
+        if (!TextUtils.isEmpty(everestVersion)) {
+            summary.append(everestVersion);
         }
+
+        if (!TextUtils.isEmpty(everestBuildType)) {
+            if (summary.length() > 0) summary.append(" | ");
+            summary.append(everestBuildType);
+        }
+
+        if (!TextUtils.isEmpty(everestEdition)) {
+            if (summary.length() > 0) summary.append(" | ");
+            summary.append(everestEdition);
+        }
+
+        return summary.length() > 0 ? summary.toString() : mContext.getString(R.string.device_info_default);
     }
 }
