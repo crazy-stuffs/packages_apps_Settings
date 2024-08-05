@@ -58,7 +58,9 @@ android_library {
         "BaseCamp/src/**/*.java",
         "BaseCamp/src/**/*.kt",
     ],
-    aaptflags: ["--extra-packages com.everest.basecamp"],
+    aaptflags: ["--extra-packages com.everest.basecamp",
+                "--extra-packages github.com.st235.lib_expandablebottombar",
+    ],
     exclude_srcs: [
         "src/com/android/settings/biometrics/fingerprint2/lib/**/*.kt",
     ],
@@ -128,6 +130,11 @@ android_library {
         "kotlin-stdlib",
         "kotlinx_coroutines_android",
         "kotlinx_coroutines",
+        "expandable-bottombar",
+        "androidx.navigation_navigation-common-ktx",
+        "androidx.navigation_navigation-fragment-ktx",
+        "androidx.navigation_navigation-runtime-ktx",
+        "androidx.navigation_navigation-ui-ktx",
     ],
 
     plugins: ["androidx.room_room-compiler-plugin"],
@@ -188,4 +195,10 @@ filegroup {
 android_library_import {
     name: "glide",
     aars: ["libs/glide-4.16.0.aar"],
+}
+
+android_library_import {
+    name: "expandable-bottombar",
+    aars: ["libs/lib-expandablebottombar-release.aar"],
+    sdk_version: "current",
 }

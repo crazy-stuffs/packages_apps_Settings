@@ -84,7 +84,8 @@
         android:summary="@string/basecamp_summary"
         android:icon="@drawable/ic_settings_everest"
         android:order="-110"
-        android:fragment="com.everest.basecamp.BaseCamp"/>
+        android:fragment="com.everest.basecamp.BaseCamp"
+        settings:controller="com.everest.basecamp.TopLevelExtensionsEntryPreferenceController"/>
 
     <com.android.settings.widget.HomepagePreference
         android:fragment="com.android.settings.deviceinfo.StorageDashboardFragment"
